@@ -1,5 +1,5 @@
 .logger-header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: left;
 
   .ant-select,
@@ -7,7 +7,18 @@
     width: 100%;
   }
 
-  .ant-btn-primary {
+  &__actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__search-action {
+    flex-grow: 1;
     background-color: #10489B;
+  }
+
+  &__clear-action {
+    font-size: 1rem;
+    font-weight: bold;
   }
 }

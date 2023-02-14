@@ -1,5 +1,5 @@
-import apiConfig from "./axios.config";
-import { AxiosResponse } from "axios";
+import http from "./axios.config";
+import {AxiosResponse} from "axios";
 
 export interface ILog {
   logId: number;
@@ -11,5 +11,5 @@ export interface ILog {
 }
 
 export const getLogs = (): Promise<AxiosResponse<{result: {auditLog: ILog[]}}>> => {
-  return apiConfig.get("/a2fbc23e-069e-4ba5-954c-cd910986f40f");
+  return http.get("/a2fbc23e-069e-4ba5-954c-cd910986f40f");
 };
