@@ -4,6 +4,7 @@ import "./Logger.scss";
 import { Table, TablePaginationConfig, Typography } from "antd";
 import { useQuery } from "react-query";
 import { getLogs, ILog } from "../../api/logger";
+import { LoggerHeader } from "./LoggerHeader/LoggerHeader";
 
 const PAGE_SIZE = 10;
 
@@ -23,6 +24,7 @@ export const Logger: React.FC = (): JSX.Element => {
       dataSource={ logs?.data.result.auditLog! }
       loading={ isLoading }
       pagination={ paginationConfig }
+      caption={<LoggerHeader />}
     >
       <Table.Column
         title="Log ID"
