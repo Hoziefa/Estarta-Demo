@@ -32,7 +32,7 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
     setToDate(null);
 
     props.onClearLogger();
-  }, [props.onClearLogger]);
+  }, [props]);
 
   return (
     <Row className="logger-header" gutter={[24, 12]} align="bottom">
