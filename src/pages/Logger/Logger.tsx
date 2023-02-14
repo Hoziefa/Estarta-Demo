@@ -55,21 +55,15 @@ export const Logger: React.FC = () => {
     if (Object.values(filters).every((value) => !value)) return;
 
     const filteredLogs = data!.data.result.auditLog.filter((log) => {
-      let isValid = false;
+      const logSet = new Set(Object.values(log));
 
       if (filters.fromDate && filters.toDate) {
-        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
+        return moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
       }
 
-      if (filters.logId && +filters.logId === log.logId) isValid = true;
-
-      if (filters.appId && +filters.appId === log.applicationId) isValid = true;
-
-      if (filters.actionType && filters.actionType === log.actionType) isValid = true;
-
-      if (filters.appType && filters.appType === log.applicationType) isValid = true;
-
-      return isValid;
+      return Object.values(filters).filter(Boolean).every((value) => {
+        return logSet.has(value);
+      });
     });
 
     setLogs(filteredLogs);
@@ -127,7 +121,7 @@ export const Logger: React.FC = () => {
 
       <Table.Column
         title="Action Details"
-        render={() => <Typography.Text>-/-</Typography.Text>}
+        render={() => <Typography.Text className="logger-table__action-details">-/-</Typography.Text>}
       />
 
       <Table.Column
