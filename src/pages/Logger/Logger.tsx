@@ -8,12 +8,12 @@ import {IBaseOption, LoggerHeader} from "./LoggerHeader/LoggerHeader";
 import moment from "moment";
 
 export interface IFilters {
-  logId?: string;
+  logId?: number;
   actionType?: string;
   appType?: string;
   fromDate?: string;
   toDate?: string;
-  appId?: string;
+  appId?: number;
 }
 
 const PAGE_SIZE = 10;
@@ -55,15 +55,21 @@ export const Logger: React.FC = () => {
     if (Object.values(filters).every((value) => !value)) return;
 
     const filteredLogs = data!.data.result.auditLog.filter((log) => {
-      const logSet = new Set(Object.values(log));
+      let isValid = false;
 
       if (filters.fromDate && filters.toDate) {
-        return moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
+        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
       }
 
-      return Object.values(filters).filter(Boolean).every((value) => {
-        return logSet.has(value);
-      });
+      if (filters.logId && filters.logId === log.logId) isValid = true;
+
+      if (filters.appId && filters.appId === log.applicationId) isValid = true;
+
+      if (filters.actionType && filters.actionType === log.actionType) isValid = true;
+
+      if (filters.appType && filters.appType === log.applicationType) isValid = true;
+
+      return isValid;
     });
 
     setLogs(filteredLogs);

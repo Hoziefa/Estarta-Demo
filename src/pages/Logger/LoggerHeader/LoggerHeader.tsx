@@ -69,7 +69,7 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
       <Col className="logger-header__group" md={3}>
         <Typography.Text>Application ID</Typography.Text>
 
-        <Input placeholder="e.g. 219841/2021" value={appId!} onChange={({target: {value}}) => setAppId(+value)} />
+        <Input placeholder="e.g. 219841" value={appId!} onChange={({target: {value}}) => setAppId(+value)} />
       </Col>
 
       <Col md={6} className="logger-header__actions">
