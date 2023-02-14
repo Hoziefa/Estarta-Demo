@@ -8,6 +8,7 @@ import {IBaseOption, LoggerHeader} from "./LoggerHeader/LoggerHeader";
 import moment from "moment";
 
 export interface IFilters {
+  logId?: string;
   actionType?: string;
   appType?: string;
   fromDate?: string;
@@ -59,6 +60,8 @@ export const Logger: React.FC = () => {
       if (filters.fromDate && filters.toDate) {
         isValid = moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
       }
+
+      if (filters.logId && +filters.logId === log.logId) isValid = true;
 
       if (filters.appId && +filters.appId === log.applicationId) isValid = true;
 

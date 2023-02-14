@@ -16,6 +16,7 @@ interface ILoggerHeaderProps {
 }
 
 export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
+  const [logId, setLogId] = useState<string | null>(null);
   const [actionType, setActionType] = useState<string | null>(null);
   const [appType, setAppType] = useState<string | null>(null);
   const [appId, setAppId] = useState<string | null>(null);
@@ -23,6 +24,7 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   const [toDate, setToDate] = useState<any | null>(null);
 
   const onClearFilters = useCallback(() => {
+    setLogId(null);
     setActionType(null);
     setAppType(null);
     setAppId(null);
@@ -35,9 +37,9 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   return (
     <Row className="logger-header" gutter={[24, 12]} align="bottom">
       <Col className="logger-header__group" md={3}>
-        <Typography.Text>Employee Name</Typography.Text>
+        <Typography.Text>Log ID</Typography.Text>
 
-        <Input placeholder="e.g. Admin.User" />
+        <Input placeholder="e.g. 920345" value={logId!} onChange={({target: {value}}) => setLogId(value)} />
       </Col>
 
       <Col className="logger-header__group" md={3}>
@@ -74,7 +76,7 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
         <Button
           type="primary"
           className="logger-header__search-action"
-          onClick={props.onSearchLogger({actionType, appType, appId, fromDate, toDate})}
+          onClick={props.onSearchLogger({logId, actionType, appType, appId, fromDate, toDate})}
         >
           Search Logger
         </Button>
