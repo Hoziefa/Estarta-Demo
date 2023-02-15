@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {Table, TablePaginationConfig, Typography} from "antd";
+import {message, Table, TablePaginationConfig, Typography} from "antd";
 import {useQuery} from "react-query";
 import {getLogs, ILog} from "../../api/logger";
 import LoggerHeader, {IBaseOption} from "./LoggerHeader";
@@ -21,7 +21,7 @@ const PAGE_SIZE = 10;
 const Logger: React.FC = () => {
   const [logs, setLogs] = useState<ILog[]>([]);
 
-  const {isLoading, data, isSuccess} = useQuery("logger", getLogs, {staleTime: Infinity});
+  const {data, isLoading, isSuccess, isError, error} = useQuery("logger", getLogs, {staleTime: Infinity});
 
   const paginationConfig = useMemo((): TablePaginationConfig => ({
     pageSize: PAGE_SIZE,
@@ -88,6 +88,10 @@ const Logger: React.FC = () => {
   useEffect(() => {
     if (isSuccess) setLogs(data.data.result.auditLog);
   }, [data?.data.result.auditLog, isSuccess]);
+
+  useEffect(() => {
+    if (isError) message.error((error as Error).message);
+  }, [isError, error]);
 
   return (
     <Table
