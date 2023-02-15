@@ -49,7 +49,7 @@ describe("<LoggerHeader /> Test", () => {
 
     fireEvent.change(screen.getAllByPlaceholderText("Select date")[0], {target: {value: new Date(2023, 10)}});
 
-    screen.getByDisplayValue("Wed Nov 01 2023 00:00:00 GMT+0300 (GMT+03:00)");
+    screen.getByDisplayValue(/Wed Nov 01 2023 00:00:00/);
   });
 
   it("should change the To-Date input value to the selected date", () => {
@@ -57,7 +57,7 @@ describe("<LoggerHeader /> Test", () => {
 
     fireEvent.change(screen.getAllByPlaceholderText("Select date")[1], {target: {value: new Date(2024, 10)}});
 
-    screen.getByDisplayValue("Fri Nov 01 2024 00:00:00 GMT+0300 (GMT+03:00)");
+    screen.getByDisplayValue(/Fri Nov 01 2024 00:00:00/);
   });
 
   it("should have the APP ID input", () => {
