@@ -85,14 +85,12 @@ describe("<LoggerHeader /> Test", () => {
 
     fireEvent.change(getLogIdInput(), {target: {value: "9950"}});
     fireEvent.change(getAppIdInput(), {target: {value: "5202"}});
-    fireEvent.change(screen.getAllByPlaceholderText("Select date")[0]);
-    fireEvent.change(screen.getAllByPlaceholderText("Select date")[1]);
 
     fireEvent.click(screen.getByRole("button", {name: "Search Logger"}));
 
     expect(props.onSearchLogger).toBeCalledWith({
-      logId: 9950,
-      appId: 5202,
+      logId: "9950",
+      appId: "5202",
       actionType: null,
       appType: null,
       fromDate: null,

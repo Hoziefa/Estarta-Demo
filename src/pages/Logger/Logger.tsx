@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {message, Table, TablePaginationConfig, Typography} from "antd";
 import {useQuery} from "react-query";
+import moment from "moment";
+import {message, Table, TablePaginationConfig, Typography} from "antd";
+
 import {getLogs, ILog} from "../../api/logger";
 import LoggerHeader, {IBaseOption} from "./LoggerHeader";
-import moment from "moment";
 
 import "./Logger.scss";
 
@@ -32,7 +33,7 @@ const Logger: React.FC = () => {
   const applicationTypes = useMemo((): IBaseOption[] => {
     if (!data) return [];
 
-    const appTypes = [...new Set(data.data.result.auditLog.map(({applicationType}) => applicationType))];
+    const appTypes = [...new Set(data.map(({applicationType}) => applicationType))];
 
     return appTypes.filter((applicationType) => !!applicationType).map((applicationType): IBaseOption => ({
       label: applicationType,
@@ -43,7 +44,7 @@ const Logger: React.FC = () => {
   const actionTypes = useMemo((): IBaseOption[] => {
     if (!data) return [];
 
-    const actionTypes = [...new Set(data.data.result.auditLog.map(({actionType}) => actionType))];
+    const actionTypes = [...new Set(data.map(({actionType}) => actionType))];
 
     return actionTypes.filter((applicationType) => !!applicationType).map((applicationType): IBaseOption => ({
       label: applicationType,
@@ -54,7 +55,7 @@ const Logger: React.FC = () => {
   const onSearchLogger = useCallback((filters: IFilters) => {
     if (Object.values(filters).every((value) => !value)) return;
 
-    const filteredLogs = data!.data.result.auditLog.filter((log) => {
+    const filteredLogs = data!.filter((log) => {
       let isValid = false;
 
       if (filters.fromDate && !filters.toDate) {
@@ -82,12 +83,12 @@ const Logger: React.FC = () => {
   const onClearLogger = useCallback(() => {
     if (!data) return;
 
-    setLogs(data.data.result.auditLog);
+    setLogs(data);
   }, [data]);
 
   useEffect(() => {
-    if (isSuccess) setLogs(data.data.result.auditLog);
-  }, [data?.data.result.auditLog, isSuccess]);
+    if (isSuccess) setLogs(data!);
+  }, [data, isSuccess]);
 
   useEffect(() => {
     if (isError) message.error((error as Error).message);
