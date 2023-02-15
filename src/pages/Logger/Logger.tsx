@@ -57,13 +57,17 @@ const Logger: React.FC = () => {
     const filteredLogs = data!.data.result.auditLog.filter((log) => {
       let isValid = false;
 
-      if (filters.fromDate && filters.toDate) {
-        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString());
+      if (filters.fromDate && !filters.toDate) {
+        isValid = moment(log.creationTimestamp).isSame(filters.fromDate.toString(), "date");
       }
 
-      if (filters.logId && +filters.logId === log.logId) isValid = true;
+      if (filters.fromDate && filters.toDate) {
+        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString(), "date");
+      }
 
-      if (filters.appId && +filters.appId === log.applicationId) isValid = true;
+      if (filters.logId && log.logId.toString().startsWith(filters.logId)) isValid = true;
+
+      if (filters.appId && log.applicationId.toString().startsWith(filters.appId)) isValid = true;
 
       if (filters.actionType && filters.actionType === log.actionType) isValid = true;
 
