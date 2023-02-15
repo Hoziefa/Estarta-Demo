@@ -8,12 +8,12 @@ import moment from "moment";
 import "./Logger.scss";
 
 export interface IFilters {
-  logId: number | null;
+  logId: string | null;
   actionType: string | null;
   appType: string | null;
   fromDate: string | null;
   toDate: string | null;
-  appId: number | null;
+  appId: string | null;
 }
 
 const PAGE_SIZE = 10;
@@ -61,9 +61,9 @@ const Logger: React.FC = () => {
         isValid = moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString());
       }
 
-      if (filters.logId && filters.logId === log.logId) isValid = true;
+      if (filters.logId && +filters.logId === log.logId) isValid = true;
 
-      if (filters.appId && filters.appId === log.applicationId) isValid = true;
+      if (filters.appId && +filters.appId === log.applicationId) isValid = true;
 
       if (filters.actionType && filters.actionType === log.actionType) isValid = true;
 

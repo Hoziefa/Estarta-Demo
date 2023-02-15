@@ -17,10 +17,10 @@ export interface ILoggerHeaderProps {
 }
 
 const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
-  const [logId, setLogId] = useState<number | null>(null);
+  const [logId, setLogId] = useState<string | null>(null);
   const [actionType, setActionType] = useState<string | null>(null);
   const [appType, setAppType] = useState<string | null>(null);
-  const [appId, setAppId] = useState<number | null>(null);
+  const [appId, setAppId] = useState<string | null>(null);
   const [fromDate, setFromDate] = useState<any | null>(null);
   const [toDate, setToDate] = useState<any | null>(null);
 
@@ -40,7 +40,7 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
       <Col md={3}>
         <Typography.Text>Log ID</Typography.Text>
 
-        <Input placeholder="e.g. 920345" value={logId!} onChange={({target: {value}}) => setLogId(+value)} />
+        <Input placeholder="e.g. 920345" value={logId!} onChange={({target: {value}}) => setLogId(value)} />
       </Col>
 
       <Col md={3}>
@@ -70,7 +70,7 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
       <Col md={3}>
         <Typography.Text>Application ID</Typography.Text>
 
-        <Input placeholder="e.g. 219841" value={appId!} onChange={({target: {value}}) => setAppId(+value)} />
+        <Input placeholder="e.g. 219841" value={appId!} onChange={({target: {value}}) => setAppId(value)} />
       </Col>
 
       <Col md={6} className="logger-header__actions">
