@@ -58,7 +58,7 @@ const Logger: React.FC = () => {
       let isValid = false;
 
       if (filters.fromDate && filters.toDate) {
-        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate, filters.toDate);
+        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString());
       }
 
       if (filters.logId && filters.logId === log.logId) isValid = true;
