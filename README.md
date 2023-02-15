@@ -23,3 +23,7 @@ This project was built with React, Typescript following web standards and best p
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.
+
+## Continuous Integration and Deployment
+
+###### This Project uses GitHub Actions to automatically run tests after each (push, pull-request)
