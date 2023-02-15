@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from "react";
 import {Button, Col, DatePicker, Input, Row, Select, Typography} from "antd";
+import {IFilters} from "../Logger";
 
 import "./LoggerHeader.scss";
 
@@ -8,14 +9,14 @@ export interface IBaseOption {
   value: string;
 }
 
-interface ILoggerHeaderProps {
+export interface ILoggerHeaderProps {
   applicationTypes: IBaseOption[];
   actionTypes: IBaseOption[];
-  onSearchLogger: (filters: object) => React.MouseEventHandler;
+  onSearchLogger: (filters: IFilters) => void;
   onClearLogger: () => void;
 }
 
-export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
+const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   const [logId, setLogId] = useState<number | null>(null);
   const [actionType, setActionType] = useState<string | null>(null);
   const [appType, setAppType] = useState<string | null>(null);
@@ -76,7 +77,7 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
         <Button
           type="primary"
           className="logger-header__search-action"
-          onClick={props.onSearchLogger({logId, actionType, appType, appId, fromDate, toDate})}
+          onClick={() => props.onSearchLogger({logId, actionType, appType, appId, fromDate, toDate})}
         >
           Search Logger
         </Button>
@@ -94,3 +95,5 @@ export const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
     </Row>
   );
 };
+
+export default LoggerHeader;

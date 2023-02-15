@@ -1,5 +1,5 @@
 import React from "react";
-import { Logger } from "./pages/Logger/Logger";
+import Logger from "./pages/Logger";
 
 const App = (): JSX.Element => (
   <Logger />

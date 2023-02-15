@@ -1,24 +1,24 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-
-import "./Logger.scss";
 import {Table, TablePaginationConfig, Typography} from "antd";
 import {useQuery} from "react-query";
 import {getLogs, ILog} from "../../api/logger";
-import {IBaseOption, LoggerHeader} from "./LoggerHeader/LoggerHeader";
+import LoggerHeader, {IBaseOption} from "./LoggerHeader";
 import moment from "moment";
 
+import "./Logger.scss";
+
 export interface IFilters {
-  logId?: number;
-  actionType?: string;
-  appType?: string;
-  fromDate?: string;
-  toDate?: string;
-  appId?: number;
+  logId: number | null;
+  actionType: string | null;
+  appType: string | null;
+  fromDate: string | null;
+  toDate: string | null;
+  appId: number | null;
 }
 
 const PAGE_SIZE = 10;
 
-export const Logger: React.FC = () => {
+const Logger: React.FC = () => {
   const [logs, setLogs] = useState<ILog[]>([]);
 
   const {isLoading, data, isSuccess} = useQuery("logger", getLogs, {staleTime: Infinity});
@@ -51,7 +51,7 @@ export const Logger: React.FC = () => {
     }));
   }, [data]);
 
-  const onSearchLogger = useCallback((filters: IFilters): React.MouseEventHandler => () => {
+  const onSearchLogger = useCallback((filters: IFilters): void => {
     if (Object.values(filters).every((value) => !value)) return;
 
     const filteredLogs = data!.data.result.auditLog.filter((log) => {
@@ -138,3 +138,5 @@ export const Logger: React.FC = () => {
     </Table>
   );
 };
+
+export default Logger;
