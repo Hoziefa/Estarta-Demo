@@ -67,7 +67,7 @@ const Logger: React.FC = () => {
 
       if (filters.logId && log.logId.toString().startsWith(filters.logId)) isValid = true;
 
-      if (filters.appId && log.applicationId.toString().startsWith(filters.appId)) isValid = true;
+      if (filters.appId && log.applicationId?.toString().startsWith(filters.appId)) isValid = true;
 
       if (filters.actionType && filters.actionType === log.actionType) isValid = true;
 
