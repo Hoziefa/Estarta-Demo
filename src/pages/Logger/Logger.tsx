@@ -51,7 +51,7 @@ const Logger: React.FC = () => {
     }));
   }, [data]);
 
-  const onSearchLogger = useCallback((filters: IFilters): void => {
+  const onSearchLogger = useCallback((filters: IFilters) => {
     if (Object.values(filters).every((value) => !value)) return;
 
     const filteredLogs = data!.data.result.auditLog.filter((log) => {

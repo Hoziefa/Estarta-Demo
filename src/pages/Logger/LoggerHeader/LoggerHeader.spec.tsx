@@ -1,14 +1,7 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import LoggerHeader, {ILoggerHeaderProps} from "./LoggerHeader";
 
-global.matchMedia = global.matchMedia || function () {
-  return {
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-  };
-};
-
-describe("LoggerHeader Test", () => {
+describe("<LoggerHeader /> Test", () => {
   const getLogIdInput = () => screen.getByPlaceholderText<HTMLInputElement>("e.g. 920345");
   const getAppIdInput = () => screen.getByPlaceholderText<HTMLInputElement>("e.g. 219841");
 

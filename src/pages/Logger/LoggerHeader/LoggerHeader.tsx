@@ -36,7 +36,7 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   }, [props]);
 
   return (
-    <Row className="logger-header" gutter={[24, 12]} align="bottom">
+    <Row className="logger-header" data-testid="logger-header" gutter={[24, 12]} align="bottom">
       <Col md={3}>
         <Typography.Text>Log ID</Typography.Text>
 
