@@ -37,37 +37,37 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
 
   return (
     <Row className="logger-header" gutter={[24, 12]} align="bottom">
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>Log ID</Typography.Text>
 
         <Input placeholder="e.g. 920345" value={logId!} onChange={({target: {value}}) => setLogId(+value)} />
       </Col>
 
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>Action Type</Typography.Text>
 
-        <Select options={props.actionTypes} value={actionType} onChange={setActionType} />
+        <Select data-testid="action-type" options={props.actionTypes} value={actionType} onChange={setActionType} />
       </Col>
 
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>Application Type</Typography.Text>
 
-        <Select options={props.applicationTypes} value={appType} onChange={setAppType} />
+        <Select data-testid="application-type" options={props.applicationTypes} value={appType} onChange={setAppType} />
       </Col>
 
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>From Date</Typography.Text>
 
         <DatePicker value={fromDate} onChange={setFromDate} />
       </Col>
 
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>To Date</Typography.Text>
 
         <DatePicker value={toDate} onChange={setToDate} />
       </Col>
 
-      <Col className="logger-header__group" md={3}>
+      <Col md={3}>
         <Typography.Text>Application ID</Typography.Text>
 
         <Input placeholder="e.g. 219841" value={appId!} onChange={({target: {value}}) => setAppId(+value)} />
@@ -85,7 +85,6 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
         <Button
           className="logger-header__clear-action"
           type="primary"
-          ghost
           onClick={onClearFilters}
           title="Clear logger filters"
         >
