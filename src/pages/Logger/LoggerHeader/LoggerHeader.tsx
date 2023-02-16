@@ -12,17 +12,18 @@ export interface IBaseOption {
 export interface ILoggerHeaderProps {
   applicationTypes: IBaseOption[];
   actionTypes: IBaseOption[];
+  searchParams: URLSearchParams;
   onSearchLogger: (filters: IFilters) => void;
   onClearLogger: () => void;
 }
 
 const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
-  const [logId, setLogId] = useState<string | null>(null);
-  const [actionType, setActionType] = useState<string | null>(null);
-  const [appType, setAppType] = useState<string | null>(null);
-  const [appId, setAppId] = useState<string | null>(null);
-  const [fromDate, setFromDate] = useState<any | null>(null);
-  const [toDate, setToDate] = useState<any | null>(null);
+  const [logId, setLogId] = useState<string | null>(props.searchParams.get("logId"));
+  const [actionType, setActionType] = useState<string | null>(props.searchParams.get("actionType"));
+  const [appType, setAppType] = useState<string | null>(props.searchParams.get("appType"));
+  const [appId, setAppId] = useState<string | null>(props.searchParams.get("appId"));
+  const [fromDate, setFromDate] = useState<any | null>(props.searchParams.get("fromDate"));
+  const [toDate, setToDate] = useState<any | null>(props.searchParams.get("toDate"));
 
   const onClearFilters = useCallback(() => {
     setLogId(null);

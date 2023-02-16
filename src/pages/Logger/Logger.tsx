@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {useSearchParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import moment from "moment";
 import {message, Table, TablePaginationConfig, Typography} from "antd";
+import moment from "moment";
 
-import {getLogs, ILog} from "../../api/logger";
 import LoggerHeader, {IBaseOption} from "./LoggerHeader";
+import {getLogs, ILog} from "../../api/logger";
 
 import "./Logger.scss";
 
@@ -20,6 +21,8 @@ export interface IFilters {
 const PAGE_SIZE = 10;
 
 const Logger: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [logs, setLogs] = useState<ILog[]>([]);
 
   const {data, isLoading, isSuccess, isError, error} = useQuery("logger", getLogs, {staleTime: Infinity});
@@ -77,14 +80,16 @@ const Logger: React.FC = () => {
       return allValid.every(Boolean);
     });
 
+    setSearchParams(JSON.stringify(filters));
     setLogs(filteredLogs);
-  }, [data]);
+  }, [data, setSearchParams]);
 
   const onClearLogger = useCallback(() => {
     if (!data) return;
 
+    setSearchParams({});
     setLogs(data);
-  }, [data]);
+  }, [data, setSearchParams]);
 
   useEffect(() => {
     if (isSuccess) setLogs(data!);
@@ -107,6 +112,7 @@ const Logger: React.FC = () => {
           applicationTypes={applicationTypes}
           onSearchLogger={onSearchLogger}
           onClearLogger={onClearLogger}
+          searchParams={searchParams}
         />
       )}
     >

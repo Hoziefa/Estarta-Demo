@@ -1,8 +1,7 @@
 import React from "react";
-import Logger from "./pages/Logger";
+import {RouterProvider} from "react-router-dom";
+import {routes} from "./routes";
 
-const App = (): JSX.Element => (
-  <Logger />
-);
+const App = () => <RouterProvider router={routes} />;
 
 export default App;
