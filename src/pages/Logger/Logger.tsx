@@ -56,25 +56,25 @@ const Logger: React.FC = () => {
     if (Object.values(filters).every((value) => !value)) return;
 
     const filteredLogs = data!.filter((log) => {
-      let isValid = false;
+      const allValid: boolean[] = [];
 
       if (filters.fromDate && !filters.toDate) {
-        isValid = moment(log.creationTimestamp).isSame(filters.fromDate.toString(), "date");
+        allValid.push(moment(log.creationTimestamp).isSame(filters.fromDate.toString(), "date"));
       }
 
       if (filters.fromDate && filters.toDate) {
-        isValid = moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString(), "date");
+        allValid.push(moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString(), "date"));
       }
 
-      if (filters.logId && log.logId.toString().startsWith(filters.logId)) isValid = true;
+      if (filters.logId) allValid.push(log.logId.toString().startsWith(filters.logId));
 
-      if (filters.appId && log.applicationId?.toString().startsWith(filters.appId)) isValid = true;
+      if (filters.appId) allValid.push(log.applicationId?.toString().startsWith(filters.appId));
 
-      if (filters.actionType && filters.actionType === log.actionType) isValid = true;
+      if (filters.actionType) allValid.push(filters.actionType === log.actionType);
 
-      if (filters.appType && filters.appType === log.applicationType) isValid = true;
+      if (filters.appType) allValid.push(filters.appType === log.applicationType);
 
-      return isValid;
+      return allValid.every(Boolean);
     });
 
     setLogs(filteredLogs);
