@@ -10,6 +10,7 @@ describe("<LoggerHeader /> Test", () => {
     applicationTypes: [{label: "app #1", value: "app #1"}],
     onSearchLogger: jest.fn(),
     onClearLogger: jest.fn(),
+    searchParams: new URLSearchParams(),
   };
 
   it("should have the LOG ID input", () => {

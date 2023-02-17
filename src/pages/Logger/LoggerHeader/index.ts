@@ -1,2 +1,2 @@
-export type {IBaseOption} from "./LoggerHeader";
+export type {IBaseOption, IFilters} from "./LoggerHeader";
 export {default} from "./LoggerHeader";

@@ -1,6 +1,5 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import {Button, Col, DatePicker, Input, Row, Select, Typography} from "antd";
-import {IFilters} from "../Logger";
 
 import "./LoggerHeader.scss";
 
@@ -9,11 +8,20 @@ export interface IBaseOption {
   value: string;
 }
 
+export interface IFilters {
+  logId: string | null;
+  actionType: string | null;
+  appType: string | null;
+  fromDate: string | null;
+  toDate: string | null;
+  appId: string | null;
+}
+
 export interface ILoggerHeaderProps {
   applicationTypes: IBaseOption[];
   actionTypes: IBaseOption[];
   searchParams: URLSearchParams;
-  onSearchLogger: (filters: IFilters) => void;
+  onSearchLogger: (filters: Map<keyof IFilters, string>) => void;
   onClearLogger: () => void;
 }
 
@@ -22,8 +30,21 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   const [actionType, setActionType] = useState<string | null>(props.searchParams.get("actionType"));
   const [appType, setAppType] = useState<string | null>(props.searchParams.get("appType"));
   const [appId, setAppId] = useState<string | null>(props.searchParams.get("appId"));
-  const [fromDate, setFromDate] = useState<any | null>(props.searchParams.get("fromDate"));
-  const [toDate, setToDate] = useState<any | null>(props.searchParams.get("toDate"));
+  const [fromDate, setFromDate] = useState<string | null>(props.searchParams.get("fromDate"));
+  const [toDate, setToDate] = useState<string | null>(props.searchParams.get("toDate"));
+
+  const filters = useMemo(() => {
+    const filtersMap = new Map<keyof IFilters, string>();
+
+    logId && filtersMap.set("logId", logId);
+    appId && filtersMap.set("appId", appId);
+    appType && filtersMap.set("appType", appType);
+    actionType && filtersMap.set("actionType", actionType);
+    fromDate && filtersMap.set("fromDate", fromDate);
+    toDate && filtersMap.set("toDate", toDate);
+
+    return filtersMap;
+  }, [actionType, appId, appType, fromDate, logId, toDate]);
 
   const onClearFilters = useCallback(() => {
     setLogId(null);
@@ -59,13 +80,13 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
       <Col md={3}>
         <Typography.Text>From Date</Typography.Text>
 
-        <DatePicker value={fromDate} onChange={setFromDate} />
+        <DatePicker value={fromDate as null} onChange={(date) => setFromDate(date?.toJSON() ?? null)} />
       </Col>
 
       <Col md={3}>
         <Typography.Text>To Date</Typography.Text>
 
-        <DatePicker value={toDate} onChange={setToDate} />
+        <DatePicker value={toDate as null} onChange={(date) => setToDate(date?.toJSON() ?? null)} />
       </Col>
 
       <Col md={3}>
@@ -78,7 +99,7 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
         <Button
           type="primary"
           className="logger-header__search-action"
-          onClick={() => props.onSearchLogger({logId, actionType, appType, appId, fromDate, toDate})}
+          onClick={() => filters.size > 0 && props.onSearchLogger(filters)}
         >
           Search Logger
         </Button>

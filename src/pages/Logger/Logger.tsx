@@ -4,19 +4,10 @@ import {useQuery} from "react-query";
 import {message, Table, TablePaginationConfig, Typography} from "antd";
 import moment from "moment";
 
-import LoggerHeader, {IBaseOption} from "./LoggerHeader";
+import LoggerHeader, {IBaseOption, IFilters} from "./LoggerHeader";
 import {getLogs, ILog} from "../../api/logger";
 
 import "./Logger.scss";
-
-export interface IFilters {
-  logId: string | null;
-  actionType: string | null;
-  appType: string | null;
-  fromDate: string | null;
-  toDate: string | null;
-  appId: string | null;
-}
 
 const PAGE_SIZE = 10;
 
@@ -55,32 +46,30 @@ const Logger: React.FC = () => {
     }));
   }, [data]);
 
-  const onSearchLogger = useCallback((filters: IFilters) => {
-    if (Object.values(filters).every((value) => !value)) return;
-
+  const onSearchLogger = useCallback((filters: Map<keyof IFilters, string>) => {
     const filteredLogs = data!.filter((log) => {
       const allValid: boolean[] = [];
 
-      if (filters.fromDate && !filters.toDate) {
-        allValid.push(moment(log.creationTimestamp).isSame(filters.fromDate.toString(), "date"));
+      if (filters.get("fromDate") && !filters.get("toDate")) {
+        allValid.push(moment(log.creationTimestamp).isSame(filters.get("fromDate"), "date"));
       }
 
-      if (filters.fromDate && filters.toDate) {
-        allValid.push(moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString(), "date"));
+      if (filters.get("fromDate") && filters.get("toDate")) {
+        allValid.push(moment(log.creationTimestamp).isBetween(filters.get("fromDate"), filters.get("toDate"), "date"));
       }
 
-      if (filters.logId) allValid.push(log.logId.toString().startsWith(filters.logId));
+      if (filters.get("logId")) allValid.push(log.logId.toString().startsWith(filters.get("logId")!));
 
-      if (filters.appId) allValid.push(log.applicationId?.toString().startsWith(filters.appId));
+      if (filters.get("appId")) allValid.push(log.applicationId?.toString().startsWith(filters.get("appId")!));
 
-      if (filters.actionType) allValid.push(filters.actionType === log.actionType);
+      if (filters.get("actionType")) allValid.push(filters.get("actionType") === log.actionType);
 
-      if (filters.appType) allValid.push(filters.appType === log.applicationType);
+      if (filters.get("appType")) allValid.push(filters.get("appType") === log.applicationType);
 
       return allValid.every(Boolean);
     });
 
-    setSearchParams(JSON.stringify(filters));
+    // setSearchParams(filters.entries());
     setLogs(filteredLogs);
   }, [data, setSearchParams]);
 
