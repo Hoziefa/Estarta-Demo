@@ -46,30 +46,30 @@ const Logger: React.FC = () => {
     }));
   }, [data]);
 
-  const onSearchLogger = useCallback((filters: Map<keyof IFilters, string>) => {
+  const onSearchLogger = useCallback((filters: Record<keyof IFilters, string>) => {
     const filteredLogs = data!.filter((log) => {
       const allValid: boolean[] = [];
 
-      if (filters.get("fromDate") && !filters.get("toDate")) {
-        allValid.push(moment(log.creationTimestamp).isSame(filters.get("fromDate"), "date"));
+      if (filters.fromDate && !filters.toDate) {
+        allValid.push(moment(log.creationTimestamp).isSame(filters.fromDate.toString(), "date"));
       }
 
-      if (filters.get("fromDate") && filters.get("toDate")) {
-        allValid.push(moment(log.creationTimestamp).isBetween(filters.get("fromDate"), filters.get("toDate"), "date"));
+      if (filters.fromDate && filters.toDate) {
+        allValid.push(moment(log.creationTimestamp).isBetween(filters.fromDate.toString(), filters.toDate.toString(), "date"));
       }
 
-      if (filters.get("logId")) allValid.push(log.logId.toString().startsWith(filters.get("logId")!));
+      if (filters.logId) allValid.push(log.logId.toString().startsWith(filters.logId));
 
-      if (filters.get("appId")) allValid.push(log.applicationId?.toString().startsWith(filters.get("appId")!));
+      if (filters.appId) allValid.push(log.applicationId?.toString().startsWith(filters.appId));
 
-      if (filters.get("actionType")) allValid.push(filters.get("actionType") === log.actionType);
+      if (filters.actionType) allValid.push(filters.actionType === log.actionType);
 
-      if (filters.get("appType")) allValid.push(filters.get("appType") === log.applicationType);
+      if (filters.appType) allValid.push(filters.appType === log.applicationType);
 
       return allValid.every(Boolean);
     });
 
-    // setSearchParams(filters.entries());
+    setSearchParams(filters);
     setLogs(filteredLogs);
   }, [data, setSearchParams]);
 
