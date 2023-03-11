@@ -4,10 +4,14 @@ import LoggerHeader, {ILoggerHeaderProps} from "./LoggerHeader";
 describe("<LoggerHeader /> Test", () => {
   const getLogIdInput = () => screen.getByPlaceholderText<HTMLInputElement>("e.g. 920345");
   const getAppIdInput = () => screen.getByPlaceholderText<HTMLInputElement>("e.g. 219841");
+  const getActionTypeInput = () => screen.getAllByRole<HTMLSelectElement>("combobox")[0];
+  const getAppTypeInput = () => screen.getAllByRole<HTMLSelectElement>("combobox")[1];
+  const getFromDateInput = () => screen.getAllByPlaceholderText<HTMLInputElement>("Select date")[0];
+  const getToDateInput = () => screen.getAllByPlaceholderText<HTMLInputElement>("Select date")[1];
 
   const props: ILoggerHeaderProps = {
-    actionTypes: [{label: "action #1", value: "action #1"}],
-    applicationTypes: [{label: "app #1", value: "app #1"}],
+    actionTypes: [{label: "ADD_EMPLOYEE", value: "ADD_EMPLOYEE"}, {label: "ADD_EMPLOYEE 2", value: "ADD_EMPLOYEE 2"}],
+    applicationTypes: [{label: "ADD_COMPANY", value: "ADD_COMPANY"}],
     onSearchLogger: jest.fn(),
     onClearLogger: jest.fn(),
     searchParams: new URLSearchParams(),
@@ -30,13 +34,29 @@ describe("<LoggerHeader /> Test", () => {
   it("should have the Action-Type select box", () => {
     render(<LoggerHeader {...props} />);
 
-    screen.getByTestId("action-type");
+    getActionTypeInput();
+  });
+
+  it("should change the selected Action-Type option to the chosen one", () => {
+    render(<LoggerHeader {...props} />);
+
+    fireEvent.change(getActionTypeInput(), {target: {value: props.actionTypes[0].value}});
+
+    expect(getActionTypeInput().value).toEqual(props.actionTypes[0].value);
   });
 
   it("should have the Application-Type select box", () => {
     render(<LoggerHeader {...props} />);
 
-    screen.getByTestId("application-type");
+    getAppTypeInput();
+  });
+
+  it("should change the selected Application-Type option to the chosen one", () => {
+    render(<LoggerHeader {...props} />);
+
+    fireEvent.change(getAppTypeInput(), {target: {value: props.applicationTypes[0].value}});
+
+    expect(getAppTypeInput().value).toEqual(props.applicationTypes[0].value);
   });
 
   it("should have the Date inputs", () => {
@@ -48,17 +68,17 @@ describe("<LoggerHeader /> Test", () => {
   it("should change the From-Date input value to the selected date", () => {
     render(<LoggerHeader {...props} />);
 
-    fireEvent.change(screen.getAllByPlaceholderText("Select date")[0], {target: {value: new Date(2023, 10)}});
+    fireEvent.change(getFromDateInput(), {target: {value: "25/01/2023"}});
 
-    screen.getByDisplayValue(/Wed Nov 01 2023 00:00:00/);
+    screen.getByDisplayValue("25/01/2023");
   });
 
   it("should change the To-Date input value to the selected date", () => {
     render(<LoggerHeader {...props} />);
 
-    fireEvent.change(screen.getAllByPlaceholderText("Select date")[1], {target: {value: new Date(2024, 10)}});
+    fireEvent.change(getToDateInput(), {target: {value: "25/01/2024"}});
 
-    screen.getByDisplayValue(/Fri Nov 01 2024 00:00:00/);
+    screen.getByDisplayValue("25/01/2024");
   });
 
   it("should have the APP ID input", () => {
@@ -86,16 +106,20 @@ describe("<LoggerHeader /> Test", () => {
 
     fireEvent.change(getLogIdInput(), {target: {value: "9950"}});
     fireEvent.change(getAppIdInput(), {target: {value: "5202"}});
+    fireEvent.change(getActionTypeInput(), {target: {value: props.actionTypes[0].value}});
+    fireEvent.change(getAppTypeInput(), {target: {value: props.applicationTypes[0].value}});
+
+    // Dayjs Dates issue always return null on the state need mocking
+    fireEvent.change(getFromDateInput(), {target: {value: "25/01/2023"}});
+    fireEvent.change(getToDateInput(), {target: {value: "25/01/2024"}});
 
     fireEvent.click(screen.getByRole("button", {name: "Search Logger"}));
 
     expect(props.onSearchLogger).toBeCalledWith({
       logId: "9950",
       appId: "5202",
-      actionType: null,
-      appType: null,
-      fromDate: null,
-      toDate: null,
+      actionType: props.actionTypes[0].value,
+      appType: props.applicationTypes[0].value,
     });
   });
 
@@ -108,14 +132,42 @@ describe("<LoggerHeader /> Test", () => {
   it("should clear the inputs sate & call the (clear-filters prop) when the clear-filters button clicked", () => {
     render(<LoggerHeader {...props} />);
 
-    fireEvent.change(getLogIdInput(), {target: {value: "9950"}});
-    fireEvent.change(getAppIdInput(), {target: {value: "5202"}});
+    fireEvent.change(getLogIdInput(), {target: {value: "505"}});
+    fireEvent.change(getAppIdInput(), {target: {value: "520"}});
+    fireEvent.change(getActionTypeInput(), {target: {value: props.actionTypes[1].value}});
+    fireEvent.change(getAppTypeInput(), {target: {value: props.applicationTypes[0].value}});
+    fireEvent.change(getFromDateInput(), {target: {value: "25/01/2023"}});
+    fireEvent.change(getToDateInput(), {target: {value: "25/01/2024"}});
 
     fireEvent.click(screen.getByRole("button", {name: "↻"}));
 
     expect(getLogIdInput().value).toEqual("");
     expect(getAppIdInput().value).toEqual("");
 
+    // Issue with clearing the value the only way to clear the value is by triggering the change event
+    // expect(getActionTypeInput().value).toEqual("");
+    // expect(getAppTypeInput().value).toEqual("");
+    // expect(getFromDateInput().value).toEqual("");
+    // expect(getToDateInput().value).toEqual("");
+
     expect(props.onClearLogger).toBeCalled();
+  });
+
+  it("should assure that the fields are initiated with the desired initial values that are coming from the (searchParams prop)", () => {
+    props.searchParams.append("logId", "9090");
+    props.searchParams.append("appId", "5050");
+    props.searchParams.append("actionType", "ADD_EMPLOYEE");
+    props.searchParams.append("appType", "ADD_COMPANY");
+
+    render(<LoggerHeader {...props} />);
+
+    expect(getLogIdInput().value).toEqual("9090");
+    expect(getAppIdInput().value).toEqual("5050");
+    expect(getActionTypeInput().value).toEqual("ADD_EMPLOYEE");
+    expect(getAppTypeInput().value).toEqual("ADD_COMPANY");
+
+    // Dates are not implemented due to the DayJS library issue with antd
+    expect(getFromDateInput().value).toEqual("");
+    expect(getToDateInput().value).toEqual("");
   });
 });

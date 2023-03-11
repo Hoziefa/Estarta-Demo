@@ -27,29 +27,29 @@ export interface ILoggerHeaderProps {
 
 const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
   const [logId, setLogId] = useState<string | null>(props.searchParams.get("logId"));
-  const [actionType, setActionType] = useState<string | null>(props.searchParams.get("actionType"));
-  const [appType, setAppType] = useState<string | null>(props.searchParams.get("appType"));
+  const [actionType, setActionType] = useState<string>(props.searchParams.get("actionType") ?? "");
+  const [appType, setAppType] = useState<string>(props.searchParams.get("appType") ?? "");
   const [appId, setAppId] = useState<string | null>(props.searchParams.get("appId"));
   const [fromDate, setFromDate] = useState<any | null>(null);
   const [toDate, setToDate] = useState<any | null>(null);
 
   const filters = useMemo<IFilters>(() => {
-    const filtersMap = {} as IFilters;
+    const appliedFilters = {} as IFilters;
 
-    logId && (filtersMap.logId = logId);
-    appId && (filtersMap.appId = appId);
-    appType && (filtersMap.appType = appType);
-    actionType && (filtersMap.actionType = actionType);
-    fromDate && (filtersMap.fromDate = fromDate);
-    toDate && (filtersMap.toDate = toDate);
+    logId && (appliedFilters.logId = logId);
+    appId && (appliedFilters.appId = appId);
+    appType && (appliedFilters.appType = appType);
+    actionType && (appliedFilters.actionType = actionType);
+    fromDate && (appliedFilters.fromDate = fromDate);
+    toDate && (appliedFilters.toDate = toDate);
 
-    return filtersMap;
+    return appliedFilters;
   }, [actionType, appId, appType, fromDate, logId, toDate]);
 
   const onClearFilters = useCallback(() => {
     setLogId(null);
-    setActionType(null);
-    setAppType(null);
+    setActionType("");
+    setAppType("");
     setAppId(null);
     setFromDate(null);
     setToDate(null);
@@ -68,13 +68,13 @@ const LoggerHeader: React.FC<ILoggerHeaderProps> = (props) => {
       <Col md={3}>
         <Typography.Text>Action Type</Typography.Text>
 
-        <Select data-testid="action-type" options={props.actionTypes} value={actionType} onChange={setActionType} />
+        <Select options={props.actionTypes} value={actionType} onChange={setActionType} />
       </Col>
 
       <Col md={3}>
         <Typography.Text>Application Type</Typography.Text>
 
-        <Select data-testid="application-type" options={props.applicationTypes} value={appType} onChange={setAppType} />
+        <Select options={props.applicationTypes} value={appType} onChange={setAppType} />
       </Col>
 
       <Col md={3}>
