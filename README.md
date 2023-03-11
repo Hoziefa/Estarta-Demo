@@ -1,21 +1,24 @@
 # Estart-Demo
 
 This project was built with React, Typescript following web standards and best practices
-[Estart-Demo](https://legendary-yeot-ce6176.netlify.app)
+[Estart-Demo](https://estarta-demo.netlify.app)
 
 ## Features
 
 * User can apply multiple filters to narrow the logs
-* Filters are presented via the Query-Params
+* Filters are persisted using Query-Params
 * Components are fully tested
 
 ## Getting Started
 
-#### 1. Install dependencies
+#### 1. Clone the repo
+`git clone https://github.com/Hoziefa/Estarta-Demo.git`
+
+#### 2. Install dependencies
 
 `npm install`
 
-#### 2. Run the development server
+#### 3. Run the development server
 
 `npm start`
 
