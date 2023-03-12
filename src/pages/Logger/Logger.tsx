@@ -46,8 +46,8 @@ const Logger: React.FC = () => {
     }));
   }, [data]);
 
-  const onSearchLogger = useCallback((filters: Record<keyof IFilters, string>) => {
-    const filteredLogs = data!.filter((log) => {
+  const filterLogs = useCallback((filters: Record<keyof IFilters, string>): ILog[] => {
+    return data!.filter((log) => {
       const allValid: boolean[] = [];
 
       if (filters.fromDate && !filters.toDate) {
@@ -68,10 +68,12 @@ const Logger: React.FC = () => {
 
       return allValid.every(Boolean);
     });
+  }, [data]);
 
+  const onSearchLogger = useCallback((filters: Record<keyof IFilters, string>) => {
     setSearchParams(filters);
-    setLogs(filteredLogs);
-  }, [data, setSearchParams]);
+    setLogs(filterLogs(filters));
+  }, [filterLogs, setSearchParams]);
 
   const onClearLogger = useCallback(() => {
     if (!data) return;
@@ -84,9 +86,25 @@ const Logger: React.FC = () => {
     if (isSuccess) setLogs(data!);
   }, [data, isSuccess]);
 
+  // Handle API error
   useEffect(() => {
     if (isError) message.error((error as Error).message);
   }, [isError, error]);
+
+  // Handle apply persisted filters
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    const filters: {[key: string]: string} = {};
+
+    for (const [key, value] of searchParams.entries()) {
+      filters[key] = value;
+    }
+
+    if (Object.keys(filters).length === 0) return;
+
+    setLogs(filterLogs(filters as Record<keyof IFilters, string>));
+  }, [filterLogs, isSuccess, onSearchLogger, searchParams]);
 
   return (
     <Table
