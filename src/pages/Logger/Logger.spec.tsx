@@ -1,3 +1,4 @@
+import {MemoryRouter} from "react-router-dom";
 import {fireEvent, render, screen} from "@testing-library/react";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {rest} from "msw";
@@ -39,7 +40,9 @@ const server = setupServer(logsHandler);
 const renderWithQuery = (queryClient: QueryClient) => {
   return render(
     <QueryClientProvider client={queryClient}>
-      <Logger />
+      <MemoryRouter initialEntries={[""]}>
+        <Logger />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
 };

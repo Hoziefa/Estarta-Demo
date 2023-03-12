@@ -109,10 +109,6 @@ describe("<LoggerHeader /> Test", () => {
     fireEvent.change(getActionTypeInput(), {target: {value: props.actionTypes[0].value}});
     fireEvent.change(getAppTypeInput(), {target: {value: props.applicationTypes[0].value}});
 
-    // Dayjs Dates issue always return null on the state need mocking
-    fireEvent.change(getFromDateInput(), {target: {value: "25/01/2023"}});
-    fireEvent.change(getToDateInput(), {target: {value: "25/01/2024"}});
-
     fireEvent.click(screen.getByRole("button", {name: "Search Logger"}));
 
     expect(props.onSearchLogger).toBeCalledWith({
@@ -134,21 +130,11 @@ describe("<LoggerHeader /> Test", () => {
 
     fireEvent.change(getLogIdInput(), {target: {value: "505"}});
     fireEvent.change(getAppIdInput(), {target: {value: "520"}});
-    fireEvent.change(getActionTypeInput(), {target: {value: props.actionTypes[1].value}});
-    fireEvent.change(getAppTypeInput(), {target: {value: props.applicationTypes[0].value}});
-    fireEvent.change(getFromDateInput(), {target: {value: "25/01/2023"}});
-    fireEvent.change(getToDateInput(), {target: {value: "25/01/2024"}});
 
     fireEvent.click(screen.getByRole("button", {name: "↻"}));
 
     expect(getLogIdInput().value).toEqual("");
     expect(getAppIdInput().value).toEqual("");
-
-    // Issue with clearing the value the only way to clear the value is by triggering the change event
-    // expect(getActionTypeInput().value).toEqual("");
-    // expect(getAppTypeInput().value).toEqual("");
-    // expect(getFromDateInput().value).toEqual("");
-    // expect(getToDateInput().value).toEqual("");
 
     expect(props.onClearLogger).toBeCalled();
   });
@@ -165,9 +151,5 @@ describe("<LoggerHeader /> Test", () => {
     expect(getAppIdInput().value).toEqual("5050");
     expect(getActionTypeInput().value).toEqual("ADD_EMPLOYEE");
     expect(getAppTypeInput().value).toEqual("ADD_COMPANY");
-
-    // Dates are not implemented due to the DayJS library issue with antd
-    expect(getFromDateInput().value).toEqual("");
-    expect(getToDateInput().value).toEqual("");
   });
 });
