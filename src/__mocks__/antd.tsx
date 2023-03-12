@@ -60,42 +60,9 @@ jest.mock("antd", () => {
   Select.Option = ({children, ...otherProps}: any) => <option {...otherProps}>{children}</option>;
   Select.OptGroup = ({children, ...otherProps}: any) => <optgroup {...otherProps}>{children}</optgroup>;
 
-  const Tooltip = (props: any) => {
-    return <antd.Tooltip {...props} getTooltipContainer={null} />;
-  };
-
-  const Modal = (props: any) => {
-    return <antd.Modal {...props} getContainer={null} />;
-  };
-  Modal.confirm = (config: any) => {
-    config.getContainer = null;
-    antd.Modal.confirm(config);
-  };
-
-  const Popover = (props: any) => {
-    return <antd.Popover {...props} getTooltipContainer={null} />;
-  };
-
-  const Checkbox = (props: any) => {
-    return <antd.Checkbox {...props} />;
-  };
-
-  Checkbox.Group = ({optionType, buttonStyle, ...rest}: any) => {
-    return <antd.Checkbox.Group {...rest} />;
-  };
-
-  const Table = (props: any) => {
-    return <antd.Table {...props} scroll={null} />;
-  };
-
   return {
     __esModule: true,
     ...antd,
-    Tooltip,
     Select,
-    Popover,
-    Checkbox,
-    Modal,
-    Table,
   };
 });

@@ -77,7 +77,7 @@ describe("<Logger /> Test", () => {
 
     screen.getByRole("columnheader", {name: "Application Type"});
 
-    await screen.findByText("Mock app type #1");
+    await screen.findByRole("cell", {name: "Mock app type #1"});
   });
 
   it("should have the App-ID column (label & value)", async () => {
@@ -93,7 +93,7 @@ describe("<Logger /> Test", () => {
 
     screen.getByRole("columnheader", {name: "Action"});
 
-    await screen.findByText("Mock action type #1");
+    await screen.findByRole("cell", {name: "Mock action type #1"});
   });
 
   it("should have the Action-Details column (label & value)", async () => {
